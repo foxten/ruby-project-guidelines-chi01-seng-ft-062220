@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_07_09_054139) do
 
   create_table "films", force: :cascade do |t|
+    t.string "gh_id"
     t.string "title"
     t.boolean "canon"
   end
@@ -30,6 +31,7 @@ ActiveRecord::Schema.define(version: 2020_07_09_054139) do
   end
 
   create_table "types", force: :cascade do |t|
+    t.string "gh_id"
     t.string "name"
     t.boolean "canon"
   end

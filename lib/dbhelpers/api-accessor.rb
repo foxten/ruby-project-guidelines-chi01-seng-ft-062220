@@ -16,3 +16,4 @@ def get_types
     types = JSON.parse(types)
     types
 end
+
