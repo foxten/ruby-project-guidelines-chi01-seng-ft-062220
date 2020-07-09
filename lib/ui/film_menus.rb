@@ -52,11 +52,14 @@ def film_menu(film)
 end
 
 
-def film_character_menu
+def film_character_menu(current_film)
+    
+    $user.people_by_film(current_film)
     #List characters
     #Else New Character
     #Else Delete Character
     #Else Back
+    
 end
 
 
@@ -64,6 +67,7 @@ def see_species(current_film)
     #Display types for current film
     #Back
 end
+
 
 def make_film_menu
     ##Maybe
