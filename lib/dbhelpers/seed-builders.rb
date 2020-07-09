@@ -6,34 +6,29 @@ def get_id(string)
 end
 
 def build_types
-    types = get_types
-    types.map do |type|
+    get_types.map do |type|
         this_type = {
-        type_id: type["id"],
-        name: type["name"]
+        name: type["name"],
+        canon: true
         }
-    this_type[:canon] = true
     Type.create(this_type)
     end
 end
 
 
 def build_films
-    films = get_films
-    films.map do |film|
+    get_films.map do |film|
         this_film = {
-        film_id: film["id"],
-        title: film["title"]
+        title: film["title"],
+        canon: true
         }
-    this_film[:canon] = true
     Film.create(this_film)
     end
 end
 
 
 def build_people
-    people = get_people
-    people.map do |person|
+    get_people.map do |person|
         person_attr = {}
         person.map do |p_attr, value|
             if p_attr == "id" || p_attr == "url"

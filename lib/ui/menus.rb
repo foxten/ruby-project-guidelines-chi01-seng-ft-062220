@@ -6,6 +6,7 @@ def get_new_username
     print "> "
     name = gets.chomp
     $user = User.create(name: name)
+    ## TODO Populate all canon=true people
     print "\e[2J\e[f"
     puts "Welcome!"
     sleep(1.5)
@@ -72,14 +73,17 @@ def select_film_menu
         
         case
             when response == "Work on existing film"
-                film_menu()
+                #film_select_menu()
 
             when response == "Make new film"
                 make_film_menu()
 
             when response == "Exit"
-                #end? 
+                #end?
         end
+end
+
+def film_select
 end
 
 
