@@ -17,7 +17,7 @@ def film_top_menu
                 make_film_menu()
 
             when response == "Exit"
-                #end?
+                puts "Goodbye!"
         end
 end
 

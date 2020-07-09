@@ -15,6 +15,12 @@ class User < ActiveRecord::Base
         films
     end
 
+    def people_by_film(film)
+        self.people.select do |person|
+            person.film_id == film.id
+        end
+    end
+
     def types_by_film(film)
         types = []
         self.people.map do |person|
