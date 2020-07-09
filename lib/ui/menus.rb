@@ -12,10 +12,15 @@ def get_new_username
     puts "What should I call you?"
     print "> "
     user_name = gets.chomp
-    new_user(user_name)
-    print "\e[2J\e[f"
-    puts "Welcome!"
-    select_film_menu()
+    if    User.all.find { |user| user.name == name_response }
+                        puts "Oops, someone already has that name."
+                        get_new_username()
+    else
+        new_user(user_name)
+        print "\e[2J\e[f"
+        puts "Welcome!"
+        select_film_menu()
+    end
 end
 
 
@@ -32,17 +37,13 @@ def welcome
             when response == "No"
                 puts "What's your name?"
                 name_response = gets.chomp
-
                 if    User.all.find { |user| user.name == name_response }
-                        puts "Oops, someone already has that name."
-                        get_new_username()
-                elsif User.all.find { |user| user.name == name_response }
-                        new_user(name_response)
-                        puts "Hi #{$user.name}!"
+                        $user = user
+                        puts "Welcome back!"
                         film_top_menu()
                 else
                     puts "hmm... can't seem to find you"
-                    get_new_username()
+                    welcome()
                 end
         end
 end
@@ -69,11 +70,10 @@ end
 
 
 def film_select_menu
-    people = #get_user_people
-    films = people.map do |person|
-            person.films
-    end
-    films = films.uniq
+    ## TODO
+    
+
+
 
     response = $prompt.select("Here are your current films:",
     %w( films )
