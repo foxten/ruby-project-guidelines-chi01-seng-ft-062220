@@ -6,16 +6,17 @@ def get_new_username
     print "> "
     name = gets.chomp
     $user = User.create(name: name)
-    system "cls"
+    print "\e[2J\e[f"
     puts "Welcome!"
-    sleep(2)
+    sleep(1.5)
     select_film_menu()
 end
 
 
 def welcome
-    system "cls"
+    print "\e[2J\e[f"
     puts "Welcome to Studio Ghibli Character Builder!"
+    sleep(1.5)
     response = $prompt.select("Are you new here?", "Yes", "No")
 
         case

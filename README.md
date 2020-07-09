@@ -1,3 +1,36 @@
+Welcome
+
+User?  (Load or Create New)
+        
+    Select Film (List)
+
+        Edit  (Select Film)
+
+            Characters  (List)
+
+                Select
+
+                    Serve Stats
+                    Modify
+                    Destroy
+
+                Create New
+                    Enter Stats
+                    Success!
+
+            Species
+
+                List all
+                back
+
+        Delete
+
+    Create New
+        Enter Stats
+        Success!
+
+
+
 # Module One Final Project Guidelines
 
 Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
