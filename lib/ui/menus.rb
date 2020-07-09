@@ -1,15 +1,19 @@
+require_relative '../../config/environment.rb'
 
 $prompt = TTY::Prompt.new
+
+def new_user(user_name)
+    $user = User.create(name: user_name)
+    populate
+end
 
 def get_new_username
     puts "What should I call you?"
     print "> "
-    name = gets.chomp
-    $user = User.create(name: name)
-    ## TODO Populate all canon=true people
+    user_name = gets.chomp
+    new_user(user_name)
     print "\e[2J\e[f"
     puts "Welcome!"
-    sleep(1.5)
     select_film_menu()
 end
 
@@ -67,6 +71,7 @@ def film_select_menu
     people = #get_user_people
     films = people.map do |person|
             person.films
+    end
     films = films.uniq
 
     response = $prompt.select("Here are your current films:",

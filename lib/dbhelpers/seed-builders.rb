@@ -9,7 +9,7 @@ def build_types
     get_types.map do |type|
         this_type = {
         name: type["name"],
-        canon: true
+        canon: true,
         user_id: $user.id
         }
     Type.create(this_type)
@@ -21,7 +21,7 @@ def build_films
     get_films.map do |film|
         this_film = {
         title: film["title"],
-        canon: true
+        canon: true,
         user_id: $user.id
         }
     Film.create(this_film)
@@ -49,9 +49,8 @@ def build_people
     end
 end
 
-
 def populate
-    build_films
     build_types
+    build_films
     build_people
 end
