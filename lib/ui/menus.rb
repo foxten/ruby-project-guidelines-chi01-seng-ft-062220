@@ -126,4 +126,3 @@ def see_species
     types
 end
 
-
