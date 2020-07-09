@@ -1,7 +1,6 @@
 require_relative '../../config/environment'
 require_relative '../dbhelpers/api-accessor'
 
-
 def get_id(string)
     string.split(/\//).last
 end
@@ -13,9 +12,11 @@ def build_types
         type_id: type["id"],
         name: type["name"]
     }
+    this_type[:canon] = true
     Type.create(this_type)
     end
 end
+
 
 def build_films
     films = get_films
@@ -24,9 +25,11 @@ def build_films
         film_id: film["id"],
         title: film["title"]
     }
+    this_film[:canon] = true
     Film.create(this_film)
     end
 end
+
 
 def build_people
     people = get_people
@@ -43,9 +46,11 @@ def build_people
                 person_attr[p_attr] = value
             end
         end
+        person_attr[:canon] = true
         Person.create(person_attr)
     end
 end
+
 
 def populate
     build_films

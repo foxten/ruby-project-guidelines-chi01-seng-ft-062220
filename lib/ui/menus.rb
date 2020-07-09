@@ -10,46 +10,50 @@ def get_new_username
 end
 
 
+def welcome
+
+    puts "Welcome to Studio Ghibli Character Builder!"
+
+    response = $prompt.select("Are you new here?", "Yes", "No")
+
+        case
+            when response == "Yes"
+                get_new_username()
+
+            when response == "No"
+                puts "What's your name?"
+                response = gets.chomp
+                if    User.all.find { |user| user.name == response }
+                        puts "Oops, someone already has that name."
+                        get_new_username()
+                elsif User.all.find { |user| user.name == response }
+                        $user = user
+                        puts "Hi #{$user.name}!"
+                else
+                    puts "hmm... can't seem to find you"
+                    get_new_username()
+                end
+        end
+end
+
+
 def get_people_by_user
+    #should return an array of people belonging to current user
 end
 
 
 def get_types_by_films_of_user
+    #should return a list of films associated with people belonging to current user
 end
 
 
 def get_people_by_user_film
-end
-
-
-def welcome
-    response = $prompt.select("Are you new here?", "Yes", "No")
-
-        case
-
-            when response == "Yes"
-                puts "And who are you?"
-                print "> "
-                name = gets.chomp
-                $user = User.create(name: name)
-                puts "Welcome!"
-
-            when response == "No"
-                if User.all.find { |user| response == user.name }
-                    puts "Oops, someone already has that name."
-                else
-                    puts "What's your name?"
-                    print "> "
-                    id = gets.chomp
-                    
-                    if User.all.find{ |user| user.id == id.to_i }
-
-                puts "Welcome back #{$user.name}"
-            end
+    #select people associated with current user, and then with current film
 end
 
 
 def select_film_menu
+
     response = $prompt.select("What should we do?", "Work on existing film", "Make new film", "Go back")
         case
             when response == "Work on existing film"
@@ -60,15 +64,13 @@ def select_film_menu
 
             when response == "Go back"
                 main_menu()
-            end
         end
-    end
 end
 
 
 def film_menu(film)
-#   ADD FILM DESCRIPTION?
-#   puts "#{film.description}"
+    #Explores a selected film associated with the user
+
     response = $prompt.select("What should we do with #{film.name}",
         "See Characters",
         "See Species",        
@@ -93,6 +95,8 @@ end
 
 
 def see_species
+    #Select people for active user, then film, then return unique types.
+
     types = []
     $user.people.map do |person|
         if person.film_id == $film.film_id

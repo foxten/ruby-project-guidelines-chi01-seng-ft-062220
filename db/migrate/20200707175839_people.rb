@@ -9,6 +9,7 @@ class People < ActiveRecord::Migration[5.2]
       c.string :eye_color
       c.string :hair_color
       c.string :user_id
+      c.boolean :canon
     end
   end
 end

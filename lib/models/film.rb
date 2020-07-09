@@ -5,4 +5,3 @@ class Film < ActiveRecord::Base
     has_many :types, through: :people
 
 end
-

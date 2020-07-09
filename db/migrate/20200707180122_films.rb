@@ -3,6 +3,7 @@ class Films < ActiveRecord::Migration[5.2]
     create_table :films do |c|
       c.string :title
       c.string :film_id
+      c.boolean :canon
     end
   end
 end

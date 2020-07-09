@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 2020_07_09_054139) do
   create_table "films", force: :cascade do |t|
     t.string "title"
     t.string "film_id"
+    t.boolean "canon"
   end
 
   create_table "people", force: :cascade do |t|
@@ -25,11 +26,14 @@ ActiveRecord::Schema.define(version: 2020_07_09_054139) do
     t.string "gender"
     t.string "eye_color"
     t.string "hair_color"
+    t.string "user_id"
+    t.boolean "canon"
   end
 
   create_table "types", force: :cascade do |t|
     t.string "name"
     t.string "type_id"
+    t.boolean "canon"
   end
 
   create_table "users", force: :cascade do |t|
