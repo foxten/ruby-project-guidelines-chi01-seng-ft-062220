@@ -13,9 +13,9 @@ def get_new_username
     puts "What should I call you?"
     print "> "
     user_name = gets.chomp
-    if    User.all.find { |user| user.name == name_response }
-                        puts "Oops, someone already has that name."
-                        get_new_username()
+    if  User.all.find { |user| user.name == name_response }
+        puts "Oops, someone already has that name."
+        get_new_username()
     else
         new_user(user_name)
         print "\e[2J\e[f"
