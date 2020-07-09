@@ -47,7 +47,7 @@ def select_film_menu
         
         case
             when response == "Work on existing film"
-                User.get_films_by_user
+                p get_films_by_user
 
             when response == "Make new film"
                 make_film_menu()
@@ -115,6 +115,7 @@ def welcome
                 if User.all.find_by(name: $user)
                     $user = User.all.find_by(name: $user)
                         puts "Hi #{$user.name}!"
+                        User.starter_personal_data
                         select_film_menu
                 else
                     puts "hmm... can't seem to find you"

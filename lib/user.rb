@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
     end
 
 # Person.all.update(user_id: 1)
-    def starter_personal_data
+    def self.starter_personal_data
         my_characters = []
         Person.all.each do |info|
             my_characters << info.dup.update(user_id: $user.id)
