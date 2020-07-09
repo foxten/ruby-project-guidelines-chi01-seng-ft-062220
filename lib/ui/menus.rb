@@ -11,9 +11,7 @@ end
 
 
 def welcome
-
     puts "Welcome to Studio Ghibli Character Builder!"
-
     response = $prompt.select("Are you new here?", "Yes", "No")
 
         case
@@ -23,6 +21,7 @@ def welcome
             when response == "No"
                 puts "What's your name?"
                 response = gets.chomp
+
                 if    User.all.find { |user| user.name == response }
                         puts "Oops, someone already has that name."
                         get_new_username()
@@ -53,8 +52,8 @@ end
 
 
 def select_film_menu
-
     response = $prompt.select("What should we do?", "Work on existing film", "Make new film", "Go back")
+        
         case
             when response == "Work on existing film"
                 film_menu()

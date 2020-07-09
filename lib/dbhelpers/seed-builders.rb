@@ -11,7 +11,7 @@ def build_types
         this_type = {
         type_id: type["id"],
         name: type["name"]
-    }
+        }
     this_type[:canon] = true
     Type.create(this_type)
     end
@@ -24,7 +24,7 @@ def build_films
         this_film = {
         film_id: film["id"],
         title: film["title"]
-    }
+        }
     this_film[:canon] = true
     Film.create(this_film)
     end
