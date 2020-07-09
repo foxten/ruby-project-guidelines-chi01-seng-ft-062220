@@ -8,6 +8,7 @@ def new_user(user_name)
     $user
 end
 
+
 def get_new_username
     puts "What should I call you?"
     print "> "
