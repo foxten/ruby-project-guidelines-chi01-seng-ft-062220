@@ -9,8 +9,7 @@ def build_types
     get_types.map do |type|
         this_type = {
         name: type["name"],
-        canon: true,
-        user_id: $user.id
+        canon: true
         }
     Type.create(this_type)
     end
@@ -21,8 +20,7 @@ def build_films
     get_films.map do |film|
         this_film = {
         title: film["title"],
-        canon: true,
-        user_id: $user.id
+        canon: true
         }
     Film.create(this_film)
     end

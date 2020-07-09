@@ -5,6 +5,7 @@ $prompt = TTY::Prompt.new
 def new_user(user_name)
     $user = User.create(name: user_name)
     populate
+    $user
 end
 
 def get_new_username
