@@ -10,6 +10,7 @@ def build_types
         this_type = {
         name: type["name"],
         canon: true
+        user_id: $user.id
         }
     Type.create(this_type)
     end
@@ -21,6 +22,7 @@ def build_films
         this_film = {
         title: film["title"],
         canon: true
+        user_id: $user.id
         }
     Film.create(this_film)
     end
@@ -42,6 +44,7 @@ def build_people
             end
         end
         person_attr[:canon] = true
+        person_attr[:user_id] = $user.id
         Person.create(person_attr)
     end
 end

@@ -34,12 +34,63 @@ def welcome
                 elsif User.all.find { |user| user.name == response }
                         $user = user
                         puts "Hi #{$user.name}!"
-                        select_film_menu()
+                        film_top_menu()
                 else
                     puts "hmm... can't seem to find you"
                     get_new_username()
                 end
         end
+end
+
+
+def film_top_menu
+    #Entry Menu after User selection
+    response = $prompt.select("What should we do?",
+        "Choose existing film",
+        "Make new film",
+        "Exit")
+        case
+            when response == "Work on existing film"
+                film_select_menu()
+
+            when response == "Make new film"
+                make_film_menu()
+
+            when response == "Exit"
+                #end?
+        end
+end
+
+
+
+def film_select_menu
+    people = #get_user_people
+    films = people.map do |person|
+            person.films
+    films = films.uniq
+
+    response = $prompt.select("Here are your current films:",
+    %w( films )
+    )
+end
+
+
+def film_menu(film)
+    #Explores a selected film associated with the user
+    response = $prompt.select("What should we do with #{film.name}",
+        "See Characters",
+        "See Species",        
+        "Go Back")
+    case
+        when response == "See Characters"
+            film_character_menu()
+
+        when response == "See Species"
+            show_film_species()
+
+        when response == "Go Back"
+            select_film_menu()
+    end
 end
 
 
@@ -63,48 +114,9 @@ def get_people_by_user_film
 end
 
 
-def select_film_menu
-    #Entry Menu after User selection
-
-    response = $prompt.select("What should we do?",
-        "Choose existing film",
-        "Make new film",
-        "Exit")
-        
-        case
-            when response == "Work on existing film"
-                #film_select_menu()
-
-            when response == "Make new film"
-                make_film_menu()
-
-            when response == "Exit"
-                #end?
-        end
-end
-
-def film_select
-end
 
 
-def film_menu(film)
-    #Explores a selected film associated with the user
 
-    response = $prompt.select("What should we do with #{film.name}",
-        "See Characters",
-        "See Species",        
-        "Go Back")
-    case
-        when response == "See Characters"
-            film_character_menu()
-
-        when response == "See Species"
-            show_film_species()
-
-        when response == "Go Back"
-            select_film_menu()
-    end
-end
 
 
 def film_character_menu
@@ -116,7 +128,6 @@ end
 
 def see_species
     #Select people for active user, then film, then return unique types.
-
     types = []
     $user.people.map do |person|
         if person.film_id == $film.film_id

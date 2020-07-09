@@ -1,7 +1,8 @@
 
 class Person < ActiveRecord::Base
 
-    belongs_to :type
-    belongs_to :film
+    belongs_to :types
+    belongs_to :films
+    belongs_to :users
     
 end
