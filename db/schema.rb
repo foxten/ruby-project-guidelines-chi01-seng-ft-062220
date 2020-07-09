@@ -10,20 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_180122) do
+ActiveRecord::Schema.define(version: 2020_07_09_024156) do
 
   create_table "films", force: :cascade do |t|
     t.string "title"
+    t.string "film_id"
   end
 
   create_table "people", force: :cascade do |t|
     t.string "name"
-    t.integer "type_id"
-    t.integer "film_id"
+    t.string "type_id"
+    t.string "film_id"
+    t.string "gender"
+    t.string "age"
+    t.string "eye_color"
+    t.string "hair_color"
   end
 
   create_table "types", force: :cascade do |t|
     t.string "name"
+    t.string "type_id"
   end
 
 end
