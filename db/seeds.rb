@@ -5,6 +5,3 @@ Type.destroy_all
 Person.destroy_all
 User.destroy_all
 
-
-
-

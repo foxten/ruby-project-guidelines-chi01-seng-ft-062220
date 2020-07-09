@@ -31,13 +31,13 @@ def welcome
 
             when response == "No"
                 puts "What's your name?"
-                response = gets.chomp
+                name_response = gets.chomp
 
-                if    User.all.find { |user| user.name == response }
+                if    User.all.find { |user| user.name == name_response }
                         puts "Oops, someone already has that name."
                         get_new_username()
-                elsif User.all.find { |user| user.name == response }
-                        $user = user
+                elsif User.all.find { |user| user.name == name_response }
+                        new_user(name_response)
                         puts "Hi #{$user.name}!"
                         film_top_menu()
                 else
