@@ -1,5 +1,5 @@
-require_relative '../config/environment'
-require_relative './api-accessor'
+require_relative '../../config/environment'
+require_relative '../dbhelpers/api-accessor'
 
 
 def get_id(string)

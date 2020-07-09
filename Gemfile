@@ -8,3 +8,4 @@ gem "pry"
 gem "rest-client"
 gem "require_all"
 gem "json"
+gem 'tty-prompt'

@@ -1,5 +1,4 @@
 
-
 def get_films
     films = RestClient.get('https://ghibliapi.herokuapp.com/films')
     films = JSON.parse(films)
