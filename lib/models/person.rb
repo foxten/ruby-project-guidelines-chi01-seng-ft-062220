@@ -20,4 +20,7 @@ class Person < ActiveRecord::Base
         else
             puts "Non-Canon Character"
         end
+    end
+
+    
 end

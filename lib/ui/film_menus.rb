@@ -87,8 +87,9 @@ def film_characters_by_movie_menu(film)
         when response == "Remove Character"
 
         when response == "Go Back"
-    
+    end    
 end
+
 
 ### Need a method to return an array of people objects for the active film, for the active user.
 def list_character_by_film_menu(film)
