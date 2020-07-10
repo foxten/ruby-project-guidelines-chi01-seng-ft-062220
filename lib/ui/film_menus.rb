@@ -147,7 +147,7 @@ def delete_character_by_film(film)
                     when confirmation == "Yes"
                         puts "Removing #{selection.name}."
                         sleep(1)
-                        selection.destroy
+                        Person.destroy(selection)
                         film_characters_by_movie_menu(film)
                     else
                         delete_character_by_film(film)
