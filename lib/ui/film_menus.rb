@@ -1,4 +1,5 @@
 require_relative '../../config/environment.rb'
+require 'io/console'
 
 $prompt = TTY::Prompt.new
 
@@ -6,37 +7,39 @@ $prompt = TTY::Prompt.new
 def film_top_menu
     print "\e[2J\e[f"
     #Entry Menu after User selection
-    response = $prompt.select("What should we do?",
-        "Choose existing film",
+    response = $prompt.select("So, #{$user.name}, What should we do?",
+        "Work with an existing film",
         "Make new film",
         "Exit")
         case
-            when response == "Choose existing film"
+            when response == "Work with an existing film"
                 select_film_menu()
 
             when response == "Make new film"
                 make_new_film_menu()
 
             when response == "Exit"
+                print "\e[2J\e[f"
                 puts "Goodbye!"
         end
 end
 
-### Should not need class methods.
-def make_new_film_menu
-    print "\e[2J\e[f"
-    response = $prompt.ask("What should we call your new film?")
-    Film.create(title: "#{response}")
-    puts "Added #{response} to your films!"
-    film_top_menu()
-end
 
-
-### Need a method that returns an array of all the film objects associated with the user.
 def select_film_menu
     print "\e[2J\e[f"
-    response = $prompt.select("Enter a film name", "Go back")
+    response = $prompt.select("What film do you want to work with?",
+    "See your existing films",
+    "Enter a film name",
+    "Go Back")
     case
+        when response == "See Your Existing Films"
+            print "\e[2J\e[f"
+            puts "Here are the films in your collection:"
+            $user.films.map { |film| puts "#{film.title}"}
+            puts "Continue"
+            STDIN.getch
+            make_new_film_menu()
+
         when response == "Enter a film name"
             film_response = $prompt.ask("What film would you like to work with?")
             film_selection = $user.films.find { |film| film.title = film_response }
@@ -44,6 +47,38 @@ def select_film_menu
             
         when response == "Go back"
             film_top_menu()
+    end
+end
+
+
+def make_new_film_menu
+    print "\e[2J\e[f"
+    response = $prompt.select("Want to add a new film to your collection?",
+    "See Existing Films",
+    "Enter Film Name",
+    "Go Back"
+    )
+    case
+        when response == "See Existing Films"
+            print "\e[2J\e[f"
+            puts "Here are the films in your collection:"
+            film_list = $user.films.map { |film| film_list << film.title }
+            film_list.uniq.map { |film| puts "#{film.title}" }
+            puts "Continue"
+            STDIN.getch
+            make_new_film_menu()
+
+        when response == "Enter Film Name"
+            print "\e[2J\e[f"
+            film_name_input = $prompt.ask("What should we call your new film?")
+            Film.create(title: "#{film_name_input}")
+            puts "Added #{film_name_input} to your films!"
+            puts "Continue"
+            STDIN.getch
+            film_top_menu()
+
+        when response == "Go Back"
+            film_top_menu
     end
 end
 
@@ -101,7 +136,7 @@ def list_character_by_film_menu(film)
     case
         when response == "Show Existing Characters",
             characters = $user.people_by_film(film)
-            characters.map { |char| puts "#{[index] + 1}.  #{char.name}" }
+            characters.map { |char| puts "#{char.name}" }
             $prompt.yes?("Done?")
             list_characters_by_film_menu(film)
 
