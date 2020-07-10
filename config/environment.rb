@@ -7,4 +7,6 @@ ActiveRecord::Base.establish_connection(
     database: 'db/development.db'
 )
 
+ActiveRecord::Base.logger = nil
+
 require_all 'lib'

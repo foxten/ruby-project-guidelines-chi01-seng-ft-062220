@@ -43,5 +43,6 @@ class User < ActiveRecord::Base
         types.uniq
     end
 
+    
 end
 

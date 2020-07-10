@@ -107,6 +107,7 @@ def film_characters_by_movie_menu(film)
     print "\e[2J\e[f"
     response = $prompt.select("#{film.title} Menu",
     "See Characters",
+    "Edit Characters",
     "Add Character",
     "Remove Character",
     "Go Back"
@@ -120,6 +121,9 @@ def film_characters_by_movie_menu(film)
             puts "Continue"
             STDIN.getch
             film_characters_by_movie_menu(film)
+
+        when response == "Edit Characters"
+            edit_character_by_film_menu(film)
 
         when response == "Add Character"
             new_char = generate_person(film)
@@ -137,7 +141,7 @@ def film_characters_by_movie_menu(film)
     end    
 end
 
-### WORKING
+
 def edit_character_by_film_menu(film)
     char_names = $user.people_by_film(film).map { |char| char.name }
     print "\e[2J\e[f"
@@ -158,7 +162,7 @@ def edit_character_by_film_menu(film)
     end
 end
 
-### WORKING
+
 def edit_character_menu(char, film)
     species = Type.all.find { |type| type.id == char.type_id }
     print "\e[2J\e[f"

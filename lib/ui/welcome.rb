@@ -2,7 +2,9 @@
 require_relative '../../config/environment.rb'
 require 'io/console'
 
+
 $prompt = TTY::Prompt.new
+
 
 def new_user(user_name)
     $user = User.create(name: user_name)
