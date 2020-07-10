@@ -137,27 +137,67 @@ def film_characters_by_movie_menu(film)
     end    
 end
 
-
-def list_character_by_film_menu(film)
+### WORKING
+def edit_character_by_film_menu(film)
+    char_names = $user.people_by_film(film).map { |char| char.name }
     print "\e[2J\e[f"
-    response = $prompt.select("Show Existing Characters",
-    "Edit Character",
-    "Go Back"
+    response = $prompt.select("Choose a Character to Edit",
+    *char_names,
+    "Cancel"
     )
     case
-        when response == "Show Existing Characters",
-            characters = $user.people_by_film(film)
-            characters.map { |char| puts "#{char.name}" }
-            $prompt.yes?("Done?")
-            list_characters_by_film_menu(film)
+        when char_names.include?(response)
+            char = $user.people_by_film(film).find { |char| char.name == response }
+            edit_character_menu(char, film)
 
-        when response == "Edit Character"
-            char_name = $prompt.ask("What Character Do You Want To Change?")
-            char = $user.people_by_film(film).find {|person| person.name == char_name }
-            edit_character_menu(char)
-
-        when response == "Go Back"
+        when response == "Cancel"
             film_characters_by_movie_menu(film)
+
+        else
+            puts "uh oh"
+    end
+end
+
+### WORKING
+def edit_character_menu(char, film)
+    species = Type.all.find { |type| type.id == char.type_id }
+    print "\e[2J\e[f"
+    
+    response = $prompt.select("#{char.name} as seen in #{film.title}",
+    "Name: #{char.name}",
+    "Age: #{char.age}",
+    "Gender: #{char.gender}",
+    "Eye Color: #{char.eye_color}",
+    "Hair Color: #{char.hair_color}",
+    "Back"
+    )
+    if response == "Name: #{char.name}"
+        new_value = $prompt.ask("New value for Name?")
+        char.name = new_value
+        edit_character_menu(char, film)
+    elsif response == "Age: #{char.age}"
+        new_value = $prompt.ask("New value for Age?")
+        char.age = new_value
+        edit_character_menu(char, film)
+    elsif response == "Gender: #{char.gender}"
+        new_value = $prompt.ask("New value for Gender?")
+        char.gender = new_value
+        edit_character_menu(char, film)
+    elsif response == "Eye Color: #{char.eye_color}"
+        new_value = $prompt.ask("New value for Eye Color?")
+        char.eye_color = new_value
+        edit_character_menu(char, film)
+    elsif response == "Hair Color: #{char.hair_color}"
+        new_value = $prompt.ask("New value for Hair Color?")
+        char.hair_color = new_value
+        edit_character_menu(char, film)
+
+    elsif response == "Back"
+        edit_character_by_film_menu(film)
+    
+    else
+        puts "hmm... something went wrong."
+        edit_character_by_film_menu(film)
     end
 end
 
