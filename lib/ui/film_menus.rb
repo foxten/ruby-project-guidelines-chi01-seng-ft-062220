@@ -1,12 +1,13 @@
+
 require_relative '../../config/environment.rb'
 require 'io/console'
 
+
 $prompt = TTY::Prompt.new
 
-### No Class Methods needed
+
 def film_top_menu
     print "\e[2J\e[f"
-    #Entry Menu after User selection
     response = $prompt.select("So, #{$user.name}, What should we do?",
         "Work with an existing film",
         "Make new film",
@@ -27,25 +28,31 @@ end
 
 def select_film_menu
     print "\e[2J\e[f"
-    response = $prompt.select("What film do you want to work with?",
-    "See your existing films",
-    "Enter a film name",
-    "Go Back")
+    response = $prompt.select("What film do you want to work on?",
+    "Enter a Film Name",
+    "See Your Existing Films",
+    "Go Back"
+    )
     case
         when response == "See Your Existing Films"
             print "\e[2J\e[f"
-            puts "Here are the films in your collection:"
-            $user.films.map { |film| puts "#{film.title}"}
-            puts "Continue"
-            STDIN.getch
-            make_new_film_menu()
+            show_films
+            select_film_menu()
 
-        when response == "Enter a film name"
-            film_response = $prompt.ask("What film would you like to work with?")
-            film_selection = $user.films.find { |film| film.title = film_response }
-            individual_film_menu(film_selection)
-            
-        when response == "Go back"
+        when response == "Enter a Film Name"
+            film_response = $prompt.ask(">")
+            if $user.films.find { |film| film.title == film_response }
+                film_selection = $user.films.find { |film| film.title == film_response}
+                individual_film_menu(film_selection)
+            else
+                puts "hmm.. can't find that film"
+                puts ""
+                puts "continue"
+                STDIN.getch
+                select_film_menu
+            end
+
+        when response == "Go Back"
             film_top_menu()
     end
 end
@@ -54,25 +61,19 @@ end
 def make_new_film_menu
     print "\e[2J\e[f"
     response = $prompt.select("Want to add a new film to your collection?",
+    "Create New Film",
     "See Existing Films",
-    "Enter Film Name",
     "Go Back"
     )
     case
         when response == "See Existing Films"
-            print "\e[2J\e[f"
-            puts "Here are the films in your collection:"
-            film_list = $user.films.map { |film| film_list << film.title }
-            film_list.uniq.map { |film| puts "#{film.title}" }
-            puts "Continue"
-            STDIN.getch
+            show_films
             make_new_film_menu()
 
-        when response == "Enter Film Name"
-            print "\e[2J\e[f"
-            film_name_input = $prompt.ask("What should we call your new film?")
-            Film.create(title: "#{film_name_input}")
-            puts "Added #{film_name_input} to your films!"
+        when response == "Create New Film"
+            new_film = generate_film
+            puts "Your new film #{new_film.title} is all set!"
+            puts ""
             puts "Continue"
             STDIN.getch
             film_top_menu()
@@ -83,18 +84,17 @@ def make_new_film_menu
 end
 
 
-### No methods should be needed.  Needs to know current film.
 def individual_film_menu(film)
     print "\e[2J\e[f"
     response = $prompt.select("What should we do with #{film.title}",
         "Characters Menu",
-        "See Species",        
+        "See Existing Species",        
         "Go Back")
     case
         when response == "Characters Menu"
             film_characters_by_movie_menu(film)
 
-        when response == "See Species"
+        when response == "See Existing Species"
             show_film_species(film)
 
         when response == "Go Back"
@@ -103,30 +103,41 @@ def individual_film_menu(film)
 end
 
 
-### Method needs to return an array of all the people objects for a specific film for that user.
-### New and Delete should not need methods.
 def film_characters_by_movie_menu(film)
     print "\e[2J\e[f"
-    response = $prompt.select("#{film.title} menu",
-    "Edit Characters",
+    response = $prompt.select("#{film.title} Menu",
+    "See Characters",
     "Add Character",
     "Remove Character",
-    "Go Back"    
+    "Go Back"
     )
     case
-        when response == "Edit Characters"
-            list_character_by_film(film)
+        when response == "See Characters"
+            puts "Current characters in #{film.title}"
+            puts ""
+            $user.people_by_film(film).map { |char| puts char.name }
+            puts ""
+            puts "Continue"
+            STDIN.getch
+            film_characters_by_movie_menu(film)
 
         when response == "Add Character"
+            new_char = generate_person(film)
+            puts "Added #{new_char.name} to #{film.title}!"
+            puts ""
+            puts "Continue"
+            STDIN.getch
+            individual_film_menu(film)
 
         when response == "Remove Character"
+            delete_character_by_film(film)
 
         when response == "Go Back"
+            individual_film_menu(film)
     end    
 end
 
 
-### Need a method to return an array of people objects for the active film, for the active user.
 def list_character_by_film_menu(film)
     print "\e[2J\e[f"
     response = $prompt.select("Show Existing Characters",
@@ -151,75 +162,108 @@ def list_character_by_film_menu(film)
 end
 
 
-
-### Should not need class methods.
-def new_character_by_film(film)
-    print "\e[2J\e[f"
-
-    #Prompt for new character info one piece at a time
-    #Send back to film_character_menu
-end
-
-
-###Should not need class methods.
 def delete_character_by_film(film)
     print "\e[2J\e[f"
-    list_of_people = $user.people_by_film(film)
-    list_of_people.map { |char| puts char.name }
-    response = $prompt.select("Here are your current characters.  Remove someone?",
+    puts "Here are your current characters."
+    puts ""
+    chars = $user.people_by_film(film)
+    chars.map { |char| puts char.name }
+    puts ""
+    response = $prompt.select("Remove someone?",
     "Choose",
     "Cancel"
     )
     case
         when response == "Choose"
             selection = $prompt.ask("Who should we remove?")
-            if list_of_people.find { |char| char.name == selection }
-                confirmation = $prompt.select("Remove #{selection.name}?",
+            ctd = chars.find { |char| char.name == selection }.id
+            if ctd != nil
+                print "\e[2J\e[f"
+                confirmation = $prompt.select("Permanently remove #{selection} from #{film.title}?",
                 "Yes",
                 "Cancel"
                 )
                 case
                     when confirmation == "Yes"
-                        puts "Removing #{selection.name}."
-                        sleep(1)
-                        Person.destroy(selection)
+                        puts "Removing #{selection}."
+                        Person.destroy(ctd)
+                        puts ""
+                        puts "Continue"
+                        STDIN.getch
                         film_characters_by_movie_menu(film)
                     else
                         delete_character_by_film(film)
                 end
-            end
-            
+            end  
         else
             puts "hmm... can't find that person"
+            puts ""
+            puts "Continue"
+            STDIN.getch
             delete_character_by_film(film)
     end
 end
 
 
-
-### Should not need method?  Might be able to inheret specific Person object from previous menu?
-def edit_character_menu(person)
+def generate_film
     print "\e[2J\e[f"
-    person.display_person_info
-    response = $prompt.select()
-
-    #List curret user info
-    #Prompt user for either Edit or Go Back
-    #if Edit, prompt for which stat to edit, then prompt for the new value
-    #check the data type.  If allowed, make update, return to edit_character_menu.
-        #Else, error, return to edit_character_menu
-
-    #Go Back
+    film_name_input = $prompt.ask("What should we call your new film?")
+    new_film = Film.create(title: "#{film_name_input}")
+    puts "Added #{film_name_input} to your films!"
+    puts ""
+    puts "Continue"
+    STDIN.getch
+    new_film_char_input = $prompt.ask("We need a character to star in #{new_film.title}. Let's make one!")
+    new_char = generate_person(new_film)
+    new_film
 end
 
 
+def generate_person(film)
+    print "\e[2J\e[f"
+    puts "Tell me about your new character!"
+    puts ""
+    new_char_attr = $prompt.collect do
+        key(:name).ask('Name?', required: true)
+        key(:type_id).ask('Species?', required: true)
+        key(:age).ask('Age?')
+        key(:gender).ask('Gender?')
+        key(:eye_color).ask('Eye Color?')
+        key(:hair_color).ask('Hair Color?')
+        key(:gender).ask('Gender?')
+      end
+    new_char_attr[:film_id] = film.id
+    new_char_attr[:user_id] = $user.id
+    new_char_attr[:canon] = false
+    if Type.all.find {|type| type.name == new_char_attr[:type_id] }
+        new_char_attr[:type_id] = type.id
+    else
+        new_type = Type.create(name: new_char_attr[:type_id])
+        new_char_attr[:type_id] = new_type.id
+    end
+    new_char = Person.create(new_char_attr)
+    new_char
+end
 
-### Method to return an array of all Types for the given movie, for the given user.
+
+def show_films
+    print "\e[2J\e[f"
+    puts "Here are the films in your collection:"
+    puts ""
+    $user.films.map { |film| puts "#{film.title}"}
+    puts ""
+    puts "Continue"
+    STDIN.getch
+end
+
+
 def show_film_species(film)
     print "\e[2J\e[f"
     species = $user.types_by_film(film)
     species.map { |type| puts type.name }
-    $prompt.ask("Back")
+    puts ""
+    puts "Continue"
+    STDIN.getch
     individual_film_menu(film)
 end
 

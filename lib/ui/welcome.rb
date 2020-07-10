@@ -1,3 +1,4 @@
+
 require_relative '../../config/environment.rb'
 require 'io/console'
 
@@ -12,15 +13,18 @@ end
 
 def get_new_username
     print "\e[2J\e[f"
-    response = $prompt.ask("What's your name?")
+    name_response = $prompt.ask("What's your name?")
     
     if  User.all.find { |user| user.name == name_response }
         puts "Oops, someone already has that name."
-        get_new_username()
+        puts "Continue"
+        STDIN.getch
+        welcome()
     else
-        new_user(user_name)
         print "\e[2J\e[f"
-        puts "Welcome, #{$user.name}!"
+        puts "Let me get your world set up..."
+        new_user(name_response)
+        puts "You're all set #{$user.name}!"
         puts "Continue"
         STDIN.getch
         select_film_menu()
@@ -44,10 +48,12 @@ def welcome
                 if  User.all.find { |user| user.name == name_response }
                     $user = User.all.find { |user| user.name == name_response }
                     puts "Welcome back, #{$user.name}!"
+                    puts ""
                     puts "Continue"
                     film_top_menu()
                 else
                     puts "hmm... can't seem to find you"
+                    puts ""
                     puts "Continue"
                     STDIN.getch
                     welcome()

@@ -5,6 +5,7 @@ class Person < ActiveRecord::Base
     belongs_to :films
     belongs_to :users
    
+    
     def display_person_info
         puts "Name: #{self.name}"
         species = Type.all.find { |type| type.id == self.type_id }
@@ -22,5 +23,5 @@ class Person < ActiveRecord::Base
         end
     end
 
-    
+
 end

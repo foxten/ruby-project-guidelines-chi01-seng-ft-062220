@@ -5,6 +5,7 @@ def get_id(string)
     string.split(/\//).last
 end
 
+
 def build_types
     get_types.map do |type|
         this_type = {
