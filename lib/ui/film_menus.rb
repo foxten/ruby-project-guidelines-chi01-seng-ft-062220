@@ -60,12 +60,13 @@ def individual_film_menu(film)
             film_characters_by_movie_menu(film)
 
         when response == "See Species"
-            show_film_species()
+            show_film_species(film)
 
         when response == "Go Back"
             select_film_menu()
     end
 end
+
 
 ### Method needs to return an array of all the people objects for a specific film for that user.
 ### New and Delete should not need methods.
@@ -86,7 +87,6 @@ def film_characters_by_movie_menu(film)
         when response == "Remove Character"
 
         when response == "Go Back"
-
     
 end
 
@@ -128,9 +128,38 @@ end
 ###Should not need class methods.
 def delete_character_by_film(film)
     print "\e[2J\e[f"
-    #Show a list of characters for the given film
-    #delete the selection
+    list_of_people = $user.people_by_film(film)
+    list_of_people.map { |char| puts char.name }
+    response = $prompt.select("Here are your current characters.  Remove someone?",
+    "Choose",
+    "Cancel"
+    )
+    case
+        when response == "Choose"
+            selection = $prompt.ask("Who should we remove?")
+            if list_of_people.find { |char| char.name == selection }
+                confirmation = $prompt.select("Remove #{selection.name}?",
+                "Yes",
+                "Cancel"
+                )
+                case
+                    when confirmation == "Yes"
+                        puts "Removing #{selection.name}."
+                        sleep(1)
+                        selection.destroy
+                        film_characters_by_movie_menu(film)
+                    else
+                        delete_character_by_film(film)
+                end
+            end
+            
+        else
+            puts "hmm... can't find that person"
+            delete_character_by_film(film)
+    end
 end
+
+
 
 ### Should not need method?  Might be able to inheret specific Person object from previous menu?
 def edit_character_menu(person)
@@ -147,12 +176,14 @@ def edit_character_menu(person)
     #Go Back
 end
 
+
+
 ### Method to return an array of all Types for the given movie, for the given user.
-def see_species(film)
+def show_film_species(film)
     print "\e[2J\e[f"
-    $user.types_by_film(film)
-    
-    #Display types for current film
-    #Back
+    species = $user.types_by_film(film)
+    species.map { |type| puts type.name }
+    $prompt.ask("Back")
+    individual_film_menu(film)
 end
 
